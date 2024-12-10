@@ -50,7 +50,7 @@ export function CreateTripPage() {
 
   }
 
-  function removeEmailFromInvites(emailToRemove: String){
+  function removeEmailFromInvites(emailToRemove: string){
     const newEmailList = emailsToInvite.filter(invited => invited !== emailToRemove)
     setEmailsToInvite(newEmailList)
   }
@@ -65,7 +65,7 @@ export function CreateTripPage() {
     <div className="h-screen flex items-center justify-center bg-pattern bg-no-repeat bg-center">
       <div className="max-w-3xl w-full px-6 text-center space-y-10">
         <div className="flex flex-col items-center gap-3">
-          <img src="/logo.svg" alt="plann.er" />
+          <img src="/logo.png" alt="FlyPlan" />
           <p className="text-zinc-300 text-lg">Convide seus amigos e planeje sua próxima viagem!</p>
         </div>
 
