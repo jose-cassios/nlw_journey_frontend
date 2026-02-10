@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mui/x-date-pickers": "^7.23.1",
+    "date-fns": "^4.1.0",
     "localforage": "^1.10.0",
     "lucide-react": "^0.447.0",
     "match-sorter": "^6.3.4",
     "postcss-cli": "^11.0.0",
     "react": "^18.3.1",
+    "react-day-picker": "^9.13.2",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "sort-by": "^0.0.2",
