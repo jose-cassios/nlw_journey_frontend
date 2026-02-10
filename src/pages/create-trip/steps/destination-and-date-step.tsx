@@ -9,12 +9,21 @@ interface DestinationAndDateStepProps {
     isGuestsInputOpen: boolean
     closeGuestsInput: () => void
     openGuestsInput: () => void
+    setDestination: (destination: string) => void
+    setEventStartAndEndDates: (dates: DateRange | undefined) => void
+    eventStartAndEndDates: DateRange | undefined
 }
 
 
-export function DestinationAndDateStep({ closeGuestsInput, isGuestsInputOpen, openGuestsInput }: DestinationAndDateStepProps) {
+export function DestinationAndDateStep({
+    closeGuestsInput,
+    isGuestsInputOpen,
+    openGuestsInput,
+    setEventStartAndEndDates,
+    eventStartAndEndDates,
+    setDestination
+}: DestinationAndDateStepProps) {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-    const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>()
 
     function openDatePicker() {
         setIsDatePickerOpen(true)
@@ -23,7 +32,7 @@ export function DestinationAndDateStep({ closeGuestsInput, isGuestsInputOpen, op
         setIsDatePickerOpen(false)
     }
 
-    const displayedDate = eventStartAndEndDates && eventStartAndEndDates.from && eventStartAndEndDates.to 
+    const displayedDate = eventStartAndEndDates && eventStartAndEndDates.from && eventStartAndEndDates.to
         ? format(eventStartAndEndDates.from, "d 'de' LLL").concat(' até ').concat(format(eventStartAndEndDates.to, "d 'de' LLL"))
         : null
 
@@ -31,7 +40,13 @@ export function DestinationAndDateStep({ closeGuestsInput, isGuestsInputOpen, op
         <div className="h-16 bg-zinc-900 px-4 rounded-xl flex items-center shadow-shape gap-1">
             <div className="flex items-center gap-2 flex-1">
                 <MapPin className="size-5 text-zinc-400" />
-                <input disabled={isGuestsInputOpen} type="text" placeholder="Para onde você vai?" className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1" />
+                <input
+                    disabled={isGuestsInputOpen}
+                    type="text"
+                    placeholder="Para onde você vai?"
+                    onChange={event => setDestination(event.target.value)}
+                    className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
+                />
             </div>
 
             <button onClick={openDatePicker} disabled={isGuestsInputOpen} className="flex items-center gap-2 text-left w-[240px]">
@@ -42,25 +57,25 @@ export function DestinationAndDateStep({ closeGuestsInput, isGuestsInputOpen, op
             </button>
 
             {isDatePickerOpen && (
-            <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-                <div className="rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-5">
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-lg font-semibold text-zinc-100">Selecione a data</h2>
-                            <button type="button" onClick={() => closeDatePicker()}>
-                                <X className="size-5 text-zinc-400" />
-                            </button>
+                <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
+                    <div className="rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-5">
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-lg font-semibold text-zinc-100">Selecione a data</h2>
+                                <button type="button" onClick={() => closeDatePicker()}>
+                                    <X className="size-5 text-zinc-400" />
+                                </button>
+                            </div>
                         </div>
+
+                        <DayPicker
+                            mode="range"
+                            selected={eventStartAndEndDates}
+                            onSelect={setEventStartAndEndDates}
+                        />
+
                     </div>
-
-                    <DayPicker
-                        mode="range"
-                        selected={eventStartAndEndDates}
-                        onSelect={setEventStartAndEndDates}
-                    />
-
                 </div>
-            </div>
             )}
 
 
