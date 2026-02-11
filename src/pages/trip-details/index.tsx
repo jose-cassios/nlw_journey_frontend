@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { CreateActivityModal } from "./create-activity-modal"
+import { CreateLinkModal } from "./create-links-modal"
 import { ImportantLinks } from "./important-links";
 import { Guests } from "./guests";
 import { Activities } from "./activities";
@@ -9,6 +10,7 @@ import { Button } from "../../components/button";
 
 export function TripDetailsPage() {
     const [isCreateActivityModalOpen, setIsCreateActivityModalOpen] = useState(false)
+    const [isCreateLinkModalOpen, setIsCreateLinkModalOpen] = useState(false)
 
     function openCreateActivityModalOpen(){
         setIsCreateActivityModalOpen(true)
@@ -16,6 +18,14 @@ export function TripDetailsPage() {
 
     function closeCreateActivityModalOpen(){
         setIsCreateActivityModalOpen(false)
+    }
+
+    function openCreateLinkModalOpen() {
+        setIsCreateLinkModalOpen(true)
+    }
+
+    function closeCreateLinkModalOpen() {
+        setIsCreateLinkModalOpen(false)
     }
 
     return (
@@ -36,6 +46,11 @@ export function TripDetailsPage() {
 
                 <div className="w-80 space-y-6">
                     <ImportantLinks />
+                    <Button onClick={openCreateLinkModalOpen} variant="secondary">
+                        Cadastrar novo link
+                        <Plus className="size-5" />
+                        {/* onClick={handleAddLink} */}
+                    </Button>
                     <div className="w-full h-px bg-zinc-800" />
                     <Guests />
                 </div>
@@ -44,6 +59,11 @@ export function TripDetailsPage() {
             {isCreateActivityModalOpen && (
                 <CreateActivityModal
                     closeCreateActivityModalOpen={closeCreateActivityModalOpen}
+                />
+            )}
+            {isCreateLinkModalOpen && (
+                <CreateLinkModal
+                    closeCreateLinksModalOpen={closeCreateLinkModalOpen}
                 />
             )}
          </div>
