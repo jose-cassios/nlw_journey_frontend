@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, UserCog } from "lucide-react";
 import { useState } from "react";
 import { CreateActivityModal } from "./create-activity-modal"
 import { CreateLinkModal } from "./create-links-modal"
@@ -7,15 +7,18 @@ import { Guests } from "./guests";
 import { Activities } from "./activities";
 import { DestinationAndDateHeader } from "./destination-and-date-header";
 import { Button } from "../../components/button";
+import { InviteGuestsModal } from "../create-trip/invite-guests-modal";
+import { api } from "../../lib/axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function TripDetailsPage() {
     const [isCreateActivityModalOpen, setIsCreateActivityModalOpen] = useState(false)
     const [isCreateLinkModalOpen, setIsCreateLinkModalOpen] = useState(false)
+    const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
 
     function openCreateActivityModalOpen(){
         setIsCreateActivityModalOpen(true)
     }
-
     function closeCreateActivityModalOpen(){
         setIsCreateActivityModalOpen(false)
     }
@@ -23,11 +26,19 @@ export function TripDetailsPage() {
     function openCreateLinkModalOpen() {
         setIsCreateLinkModalOpen(true)
     }
-
     function closeCreateLinkModalOpen() {
         setIsCreateLinkModalOpen(false)
     }
 
+    function openGuestsModal(){
+        setIsGuestsModalOpen(true)
+    }
+    function closeGuestsModal(){
+        setIsGuestsModalOpen(false)
+    }
+
+    const { tripId } = useParams()
+    const navigate = useNavigate()
     return (
          <div className="max-w-6xl px-6 py-10 mx-auto space-y-8">
             <DestinationAndDateHeader />
@@ -49,10 +60,13 @@ export function TripDetailsPage() {
                     <Button onClick={openCreateLinkModalOpen} variant="secondary">
                         Cadastrar novo link
                         <Plus className="size-5" />
-                        {/* onClick={handleAddLink} */}
                     </Button>
                     <div className="w-full h-px bg-zinc-800" />
                     <Guests />
+                    <Button onClick={openGuestsModal} variant="secondary">
+                        <UserCog className="size-5" />
+                        Gerenciar convidados
+                    </Button>
                 </div>
             </main>
 
@@ -66,6 +80,17 @@ export function TripDetailsPage() {
                     closeCreateLinksModalOpen={closeCreateLinkModalOpen}
                 />
             )}
+            {isGuestsModalOpen && (
+                <InviteGuestsModal
+                    closeGuestModal={closeGuestsModal}
+                    onAddEmail={async (email) => {
+                        await api.post(`/trips/${tripId}/invites`, { email })
+                        closeGuestsModal()
+                        navigate(`/trips/${tripId}`)
+                    }}
+                />
+            )}
+
          </div>
     )
 }

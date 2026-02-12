@@ -10,51 +10,40 @@ import { api } from "../../lib/axios"
 export function CreateTripPage() {
   const navigate = useNavigate()
 
+  // GuestsInput é o campo de Quem estará na viagem
   const [isGuestsInputOpen, setIsGuestsInputOpen] = useState(false)
-  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
-  const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState(false)
-
-  const [destination, setDestination] = useState('')
-  const [ownerName, setOwnerName] = useState('')
-  const [ownerEmail, setOwnerEmail] = useState('')
-  const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>()
-
-  const [emailsToInvite, setEmailsToInvite] = useState([''])
-  
   function openGuestsInput() {
     setIsGuestsInputOpen(true)
   }
   function closeGuestsInput(){
     setIsGuestsInputOpen(false)
   }
+
+  // Modal para inserir os emails dos convidados
+  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
   function openGuestsModal(){
     setIsGuestsModalOpen(true)
   }
   function closeGuestModal(){
     setIsGuestsModalOpen(false)
   }
+
+  // Modal para confirmar a viagem
+  const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState(false)
   function openConfirmTripModal(){
     setIsConfirmTripModalOpen(true)
   }
   function closeConfirmTripModal(){
     setIsConfirmTripModalOpen(false)
   }
+
+  const [destination, setDestination] = useState('')
+  const [ownerName, setOwnerName] = useState('')
+  const [ownerEmail, setOwnerEmail] = useState('')
+  const [eventStartAndEndDates, setEventStartAndEndDates] = useState<DateRange | undefined>()
+
+  const [emailsToInvite, setEmailsToInvite] = useState<string[]>([])
   
-  function addNewEmailToInvite(event: FormEvent<HTMLFormElement>){
-    event.preventDefault()
-
-    const data = new FormData(event.currentTarget)
-    const email = data.get('email')?.toString()
-
-    if (email && !emailsToInvite.includes(email)){
-      setEmailsToInvite([
-        ...emailsToInvite, email
-      ])
-    }
-    event.currentTarget.reset()
-
-  }
-
   function removeEmailFromInvites(emailToRemove: string){
     const newEmailList = emailsToInvite.filter(invited => invited !== emailToRemove)
     setEmailsToInvite(newEmailList)
@@ -116,12 +105,16 @@ export function CreateTripPage() {
       </div>
 
         {isGuestsModalOpen && (
-        <InviteGuestsModal 
-            emailsToInvite={emailsToInvite}
-            addNewEmailToInvite={addNewEmailToInvite}
-            closeGuestModal={closeGuestModal}
-            removeEmailFromInvites={removeEmailFromInvites}
-        />
+          <InviteGuestsModal 
+              emailsToInvite={emailsToInvite}
+              onAddEmail={(email) => {
+                if (!emailsToInvite.includes(email)) {
+                  setEmailsToInvite(prev => [...prev, email])
+                }
+              }}
+              closeGuestModal={closeGuestModal}
+              onRemoveEmail={removeEmailFromInvites}
+          />
         )}
 
         {isConfirmTripModalOpen && (
